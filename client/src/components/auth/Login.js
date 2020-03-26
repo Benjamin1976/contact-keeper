@@ -3,11 +3,11 @@ import AuthContext from '../../context/auth/authContext';
 import AlertContext from '../../context/alert/alertContext';
 
 const Login = props => {
-  const alertContext = useContext(AlertContext);
   const authContext = useContext(AuthContext);
-
-  const { setAlert } = alertContext;
   const { login, error, clearErrors, isAuthenticated } = authContext;
+
+  const alertContext = useContext(AlertContext);
+  const { setAlert } = alertContext;
 
   useEffect(() => {
     if (isAuthenticated) {
@@ -18,6 +18,7 @@ const Login = props => {
       setAlert(error, 'danger');
       clearErrors();
     }
+
     // eslint-disable-next-line
   }, [error, isAuthenticated, props.history]);
 
@@ -49,9 +50,8 @@ const Login = props => {
       </h1>
       <form onSubmit={onSubmit}>
         <div className='form-group'>
-          <label htmlFor='email'>Email Address</label>
+          <label htmlFor='email'>Email address</label>
           <input
-            id='email'
             type='email'
             name='email'
             value={email}
@@ -62,7 +62,6 @@ const Login = props => {
         <div className='form-group'>
           <label htmlFor='password'>Password</label>
           <input
-            id='password'
             type='password'
             name='password'
             value={password}

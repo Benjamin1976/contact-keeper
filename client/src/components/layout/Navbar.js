@@ -1,4 +1,4 @@
-import React, { Fragment, useContext, useEffect } from 'react';
+import React, { Fragment, useContext } from 'react';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 import AuthContext from '../../context/auth/authContext';
@@ -6,15 +6,10 @@ import ContactContext from '../../context/contact/contactContext';
 
 const Navbar = ({ title, icon }) => {
   const authContext = useContext(AuthContext);
+  const { isAuthenticated, logout, user } = authContext;
+
   const contactContext = useContext(ContactContext);
-
-  const { isAuthenticated, logout, user, loadUser } = authContext;
   const { clearContacts } = contactContext;
-
-  useEffect(() => {
-    loadUser();
-    // eslint-disable-next-line
-  }, []);
 
   const onLogout = () => {
     logout();
@@ -26,13 +21,12 @@ const Navbar = ({ title, icon }) => {
       <li>Hello {user && user.name}</li>
       <li>
         <a onClick={onLogout} href='#!'>
-          <i className='fas fa-sign-out-alt' />{' '}
+          <i className='fas fa-sign-out-alt'></i>
           <span className='hide-sm'>Logout</span>
         </a>
       </li>
     </Fragment>
   );
-
   const guestLinks = (
     <Fragment>
       <li>
@@ -45,14 +39,12 @@ const Navbar = ({ title, icon }) => {
   );
 
   return (
-    <div className='navbar bg-primary'>
+    <nav className='navbar bg-primary'>
       <h1>
-        <Link to='/'>
-          <i className={icon} /> {title}
-        </Link>
+        <i className={icon} /> {title}
       </h1>
       <ul>{isAuthenticated ? authLinks : guestLinks}</ul>
-    </div>
+    </nav>
   );
 };
 
