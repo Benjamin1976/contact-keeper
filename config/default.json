@@ -1,0 +1,5 @@
+{
+  "mongoURI_local": "mongodb://contact-keeper:SKYline_123@127.0.0.1:27017/contact-keeper?retryWrites=true&w=majority",
+  "mongoURI_online": "mongodb+srv://ben123:SKYline_123@cluster0-80yp7.mongodb.net/test?retryWrites=true&w=majority",
+  "jwtSecret": "Secret"
+}
