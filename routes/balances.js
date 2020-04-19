@@ -7,6 +7,13 @@ const { check, validationResult } = require('express-validator');
 const User = require('../models/User');
 const Balance = require('../models/Balance');
 
+const returnDate = dt => {
+  if (dt === null || dt === '') return dt;
+  var delim = dt.match(/\D/);
+  var dateps = dt.split(delim);
+  return new Date(dateps[2] + '-' + dateps[1] + '-' + dateps[0]);
+};
+
 // @route   GET api/balances
 // @desc    Get all users balances
 // @access  Private
@@ -34,7 +41,7 @@ router.post(
       check('account', 'Please add an account')
         .not()
         .isEmpty(),
-      check('outstanding', 'Please ensure numerice').isNumeric()
+      check('outstanding', 'Please ensure numeric').isNumeric()
       //   ,
       // check('email', 'Please include a valid email').isEmail()
     ]
@@ -44,7 +51,20 @@ router.post(
     if (!errors.isEmpty()) {
       return res.status(400).json({ errors: errors.array() });
     }
-    const { account, type, period, outstanding } = req.body;
+    const {
+      status,
+      period,
+      bank,
+      account,
+      code,
+      type,
+      date_due,
+      due,
+      outstanding,
+      minimum,
+      available,
+      rewards
+    } = req.body;
 
     try {
       // check if user exists
@@ -52,7 +72,7 @@ router.post(
         user: req.user.id,
         account: account,
         type: type,
-        period: period
+        period: returnDate(period)
       });
 
       if (balance) {
@@ -61,10 +81,18 @@ router.post(
 
       balance = new Balance({
         user: req.user.id,
+        status: status,
+        period: returnDate(period),
+        bank: bank,
         account: account,
+        code: code,
         type: type,
-        period: period,
-        outstanding: outstanding
+        date_due: returnDate(date_due),
+        due: due,
+        outstanding: outstanding,
+        minimum: minimum,
+        available: available,
+        rewards: rewards
       });
 
       // save balance
@@ -86,6 +114,7 @@ router.post(
       res.json(balance);
     } catch (err) {
       console.error(err.message);
+      console.log(returnDate(period));
       res.status(500).send('Server Error');
     }
   }
@@ -95,13 +124,35 @@ router.post(
 // @desc    Update balance
 // @access  Private
 router.put('/:id', auth, async (req, res) => {
-  const { account, type, period, outstanding } = req.body;
+  const {
+    status,
+    period,
+    bank,
+    account,
+    code,
+    type,
+    date_due,
+    due,
+    outstanding,
+    minimum,
+    available,
+    rewards
+  } = req.body;
 
   const balanceFields = {};
+
+  if (status) balanceFields.status = status;
+  if (period) balanceFields.period = returnDate(period);
+  if (bank) balanceFields.bank = bank;
   if (account) balanceFields.account = account;
+  if (code) balanceFields.code = code;
   if (type) balanceFields.type = type;
-  if (period) balanceFields.period = period;
+  if (date_due) balanceFields.date_due = returnDate(date_due);
+  if (due) balanceFields.due = due;
   if (outstanding) balanceFields.outstanding = outstanding;
+  if (minimum) balanceFields.minimum = minimum;
+  if (available) balanceFields.available = available;
+  if (rewards) balanceFields.rewards = rewards;
 
   try {
     let balance = await Balance.findById(req.params.id);

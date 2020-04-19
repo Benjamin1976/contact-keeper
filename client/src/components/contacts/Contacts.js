@@ -1,8 +1,8 @@
 import React, { Fragment, useContext, useEffect } from 'react';
 import { CSSTransition, TransitionGroup } from 'react-transition-group';
 import ContactItem from './ContactItem';
-import Spinner from '../layout/Spinner';
 import ContactContext from '../../context/contact/contactContext';
+import Spinner from '../layout/Spinner';
 
 const Contacts = () => {
   const contactContext = useContext(ContactContext);
@@ -26,7 +26,7 @@ const Contacts = () => {
             ? filtered.map(contact => (
                 <CSSTransition
                   key={contact._id}
-                  timeout={500}
+                  timeout={1000}
                   classNames='item'
                 >
                   <ContactItem contact={contact} />
@@ -35,7 +35,7 @@ const Contacts = () => {
             : contacts.map(contact => (
                 <CSSTransition
                   key={contact._id}
-                  timeout={500}
+                  timeout={1000}
                   classNames='item'
                 >
                   <ContactItem contact={contact} />
@@ -48,5 +48,4 @@ const Contacts = () => {
     </Fragment>
   );
 };
-
 export default Contacts;

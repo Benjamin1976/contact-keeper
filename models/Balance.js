@@ -1,5 +1,7 @@
 const mongoose = require('mongoose');
 
+// status, period, bank, account, code, date_due, due, outstanding, minimum, available, rewards
+
 const BalanceSchema = mongoose.Schema({
   user: {
     type: mongoose.Schema.Types.ObjectId,
@@ -22,6 +24,9 @@ const BalanceSchema = mongoose.Schema({
     default: 'not paid'
   },
   period: {
+    type: Date
+  },
+  date_due: {
     type: Date
   },
   due: {
