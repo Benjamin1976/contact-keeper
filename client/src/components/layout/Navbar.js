@@ -18,6 +18,12 @@ const Navbar = ({ title, icon }) => {
 
   const authLinks = (
     <Fragment>
+      <li>
+        <Link to='/'>Contacts</Link>
+      </li>
+      <li>
+        <Link to='/balances'>Balances</Link>
+      </li>
       <li>Hello {user && user.name}</li>
       <li>
         <a onClick={onLogout} href='#!'>
@@ -50,12 +56,12 @@ const Navbar = ({ title, icon }) => {
 
 Navbar.propTypes = {
   title: PropTypes.string.isRequired,
-  icon: PropTypes.string
+  icon: PropTypes.string,
 };
 
 Navbar.defaultProps = {
   title: 'Contact Keeper',
-  icon: 'fas fa-id-card-alt'
+  icon: 'fas fa-id-card-alt',
 };
 
 export default Navbar;

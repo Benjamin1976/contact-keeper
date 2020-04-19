@@ -7,7 +7,7 @@ import Spinner from '../layout/Spinner';
 
 import { CSVLink } from 'react-csv';
 
-const Balances = () => {
+const BalancesCopy = () => {
   const balanceContext = useContext(BalanceContext);
   const { balances, current, getBalances, loading } = balanceContext;
 
@@ -42,13 +42,7 @@ const Balances = () => {
   return (
     <Fragment>
       <h1>Balances</h1>
-      {balances !== null && !loading ? (
-        <CSVLink data={balanceContext.balances} headers={headers}>
-          Download me
-        </CSVLink>
-      ) : (
-        <span></span>
-      )}
+
       <div className='divTable blueTable'>
         <div className='divTableHeading'>
           <div className='divTableRow'>
@@ -81,9 +75,55 @@ const Balances = () => {
             <Spinner />
           )}
         </div>
+        {balances !== null && !loading ? (
+          <CSVLink data={balanceContext.balances} headers={headers}>
+            Download me
+          </CSVLink>
+        ) : (
+          <span></span>
+        )}
       </div>
+      <table>
+        {balances !== null && !loading ? (
+          balances.map((balance) =>
+            current !== null && current._id === balance._id ? (
+              <tr>
+                <td>{balance.code}</td>
+                <td>
+                  {balance.date_due != null && balance.date_due != ''
+                    ? new Intl.DateTimeFormat('en-AU').format(
+                        new Date(balance.date_due)
+                      )
+                    : ''}
+                </td>
+                <td>{balance.outstanding}</td>
+                <td>{balance.due}</td>
+                <td>{balance.minimum}</td>
+                <td>{balance.available}</td>
+              </tr>
+            ) : (
+              <tr>
+                <td>{balance.code}</td>
+                <td>
+                  {balance.date_due != null && balance.date_due != ''
+                    ? new Intl.DateTimeFormat('en-AU').format(
+                        new Date(balance.date_due)
+                      )
+                    : ''}
+                </td>
+                <td>{balance.outstanding}</td>
+                <td>{balance.due}</td>
+                <td>{balance.minimum}</td>
+                <td>{balance.available}</td>
+              </tr>
+            )
+          )
+        ) : (
+          <Spinner />
+        )}
+      </table>
     </Fragment>
   );
 };
 
-export default Balances;
+export default BalancesCopy;

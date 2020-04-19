@@ -6,7 +6,21 @@ const BalanceItem = ({ balance }) => {
 
   const { current, deleteBalance, setCurrentBalance } = balanceContext;
 
-  const { id, account, type, value } = balance;
+  const {
+    _id,
+    status,
+    period,
+    bank,
+    account,
+    code,
+    type,
+    date_due,
+    due,
+    outstanding,
+    minimum,
+    available,
+    rewards
+  } = balance;
 
   const newRow = current == null;
 
@@ -14,15 +28,32 @@ const BalanceItem = ({ balance }) => {
     console.log('edit balance');
   };
   const onDelete = () => {
-    deleteBalance(id);
+    deleteBalance(_id);
   };
 
   return (
     <Fragment>
       <div className='divTableRow'>
+        <div className='divTableCell'>{status}</div>
+        <div className='divTableCell'>
+          {period != null && period != ''
+            ? new Intl.DateTimeFormat('en-AU').format(new Date(period))
+            : ''}
+        </div>
+        <div className='divTableCell'>{bank}</div>
         <div className='divTableCell'>{account}</div>
+        <div className='divTableCell'>{code}</div>
         <div className='divTableCell'>{type}</div>
-        <div className='divTableCell'>{value}</div>
+        <div className='divTableCell'>
+          {date_due != null && date_due != ''
+            ? new Intl.DateTimeFormat('en-AU').format(new Date(date_due))
+            : ''}
+        </div>
+        <div className='divTableCell'>{due}</div>
+        <div className='divTableCell'>{outstanding}</div>
+        <div className='divTableCell'>{minimum}</div>
+        <div className='divTableCell'>{available}</div>
+        <div className='divTableCell'>{rewards}</div>
         <div className='divTableCell divButtonBlock'>
           <button
             className='btn-light btn-sm btn-grid-2'

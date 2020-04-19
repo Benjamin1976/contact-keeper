@@ -46,7 +46,7 @@ const ContactState = props => {
     // not sending token as its send locally
     const config = {
       headers: {
-        'Content-Tyoe': 'application/json'
+        'Content-Type': 'application/json'
       }
     };
 

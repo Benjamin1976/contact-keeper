@@ -1,4 +1,5 @@
 import {
+  GET_BALANCES,
   ADD_BALANCE,
   UPDATE_BALANCE,
   DELETE_BALANCE,
@@ -8,10 +9,16 @@ import {
 
 export default (state, action) => {
   switch (action.type) {
+    case GET_BALANCES:
+      return {
+        ...state,
+        balances: action.payload
+      };
+
     case ADD_BALANCE:
       return {
         ...state,
-        balances: [...state.balances, action.payload]
+        balances: [action.payload, ...state.balances]
         // as above state is being passed and state is immutable, need to make a copy
       };
 
@@ -19,7 +26,7 @@ export default (state, action) => {
       return {
         ...state,
         balances: state.balances.map(balance =>
-          balance.id === action.payload.id ? action.payload : balance
+          balance._id === action.payload._id ? action.payload : balance
         )
         // as above state is being passed and state is immutable, need to make a copy
       };
@@ -28,7 +35,7 @@ export default (state, action) => {
       return {
         ...state,
         balances: state.balances.filter(
-          balance => balance.id !== action.payload
+          balance => balance._id !== action.payload
         )
       };
 
