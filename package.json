@@ -21,7 +21,7 @@
     "express-validator": "^6.4.0",
     "jsonwebtoken": "^8.5.1",
     "mongoose": "^5.9.3",
-    "nodemailer": "^6.4.6",
+    "nodemailer": "^6.4.16",
     "react-csv": "^2.0.3",
     "react-datepicker": "^2.14.1"
   },
