@@ -1,26 +1,24 @@
-const express = require('express');
+const express = require("express");
 const router = express.Router();
-const bcrypt = require('bcryptjs');
-const jwt = require('jsonwebtoken');
-const config = require('config');
-const { check, validationResult } = require('express-validator');
+const bcrypt = require("bcryptjs");
+const jwt = require("jsonwebtoken");
+const config = require("config");
+const { check, validationResult } = require("express-validator");
 
-const User = require('../models/User');
+const User = require("../models/User");
 
 // @route   POST api/users
 // @desc    Register a user
-// @access  Public
+// @access  Publics
 router.post(
-  '/',
+  "/",
   [
-    check('name', 'Please add a name')
-      .not()
-      .isEmpty(),
-    check('email', 'Please include a valid email').isEmail(),
+    check("name", "Please add a name").not().isEmpty(),
+    check("email", "Please include a valid email").isEmail(),
     check(
-      'password',
-      'Please enter a password with 6 or more characters'
-    ).isLength({ min: 6 })
+      "password",
+      "Please enter a password with 6 or more characters"
+    ).isLength({ min: 6 }),
   ],
   async (req, res) => {
     const errors = validationResult(req);
@@ -34,13 +32,13 @@ router.post(
       let user = await User.findOne({ email: email });
 
       if (user) {
-        res.status(400).json({ msg: 'User already exists' });
+        res.status(400).json({ msg: "User already exists" });
       }
 
       user = new User({
         name: name,
         email: email,
-        password: password
+        password: password,
       });
 
       // create encryption something
@@ -54,14 +52,14 @@ router.post(
 
       const payload = {
         user: {
-          id: user.id
-        }
+          id: user.id,
+        },
       };
 
       // Create jwtToken & return
       jwt.sign(
         payload,
-        config.get('jwtSecret'),
+        config.get("jwtSecret"),
         { expiresIn: 360000 },
         (err, token) => {
           if (err) throw err;
@@ -70,7 +68,7 @@ router.post(
       );
     } catch (err) {
       console.error(err.message);
-      res.status(500).send('Server Error');
+      res.status(500).send("Server Error");
     }
   }
 );

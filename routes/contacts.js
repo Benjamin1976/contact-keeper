@@ -1,25 +1,25 @@
-const express = require('express');
+const express = require("express");
 const router = express.Router();
-const auth = require('../middleware/auth');
+const auth = require("../middleware/auth");
 
-const { check, validationResult } = require('express-validator');
+const { check, validationResult } = require("express-validator");
 
-const User = require('../models/User');
-const Contact = require('../models/Contact');
+const User = require("../models/User");
+const Contact = require("../models/Contact");
 
 // @route   GET api/contacts
 // @desc    Get all users contacts
-// @access  Private
-router.get('/', auth, async (req, res) => {
+// @access  Privates
+router.get("/", auth, async (req, res) => {
   try {
     // Retrieve all contacts for logged in user
     const contacts = await Contact.find({ user: req.user.id }).sort({
-      date: -1
+      date: -1,
     });
     res.json(contacts);
   } catch (err) {
     console.error(err.message);
-    res.status(500).send('Server Error');
+    res.status(500).send("Server Error");
   }
 });
 
@@ -27,15 +27,13 @@ router.get('/', auth, async (req, res) => {
 // @desc    Add new contact
 // @access  Private
 router.post(
-  '/',
+  "/",
   [
     auth,
     [
-      check('name', 'Please add a name')
-        .not()
-        .isEmpty(),
-      check('email', 'Please include a valid email').isEmail()
-    ]
+      check("name", "Please add a name").not().isEmpty(),
+      check("email", "Please include a valid email").isEmail(),
+    ],
   ],
   async (req, res) => {
     const errors = validationResult(req);
@@ -50,11 +48,11 @@ router.post(
         user: req.user.id,
         name: name,
         email: email,
-        phone: phone
+        phone: phone,
       });
 
       if (contact) {
-        res.status(400).json({ msg: 'Contact already exists' });
+        res.status(400).json({ msg: "Contact already exists" });
       }
 
       contact = new Contact({
@@ -62,7 +60,7 @@ router.post(
         name: name,
         email: email,
         phone: phone,
-        type: type
+        type: type,
       });
 
       // save contact
@@ -84,7 +82,7 @@ router.post(
       res.json(contact);
     } catch (err) {
       console.error(err.message);
-      res.status(500).send('Server Error');
+      res.status(500).send("Server Error");
     }
   }
 );
@@ -92,7 +90,7 @@ router.post(
 // @route   PUT api/contacts/:id
 // @desc    Update contact
 // @access  Private
-router.put('/:id', auth, async (req, res) => {
+router.put("/:id", auth, async (req, res) => {
   const { name, email, phone, type } = req.body;
 
   const contactFields = {};
@@ -105,11 +103,11 @@ router.put('/:id', auth, async (req, res) => {
     let contact = await Contact.findById(req.params.id);
 
     if (!contact) {
-      return res.status(404).json({ msg: 'Contact does not exist' });
+      return res.status(404).json({ msg: "Contact does not exist" });
     }
 
     if (contact.user.toString() !== req.user.id) {
-      return res.status(401).json({ msg: 'Not Authorised' });
+      return res.status(401).json({ msg: "Not Authorised" });
     }
 
     contact = await Contact.findByIdAndUpdate(
@@ -121,31 +119,31 @@ router.put('/:id', auth, async (req, res) => {
     res.json(contact);
   } catch (err) {
     console.error(err.message);
-    res.status(500).send('Server Error');
+    res.status(500).send("Server Error");
   }
 });
 
 // @route   DELETE api/contacts/:id
 // @desc    Delete contact
 // @access  Private
-router.delete('/:id', auth, async (req, res) => {
+router.delete("/:id", auth, async (req, res) => {
   try {
     let contact = await Contact.findById(req.params.id);
 
     if (!contact) {
-      return res.status(400).json({ msg: 'Contact does not exist' });
+      return res.status(400).json({ msg: "Contact does not exist" });
     }
 
     if (contact.user.toString() !== req.user.id) {
-      return res.status(401).json({ msg: 'Not Authorised' });
+      return res.status(401).json({ msg: "Not Authorised" });
     }
 
     await Contact.findByIdAndRemove(req.params.id);
 
-    res.json({ msg: 'Contact Removed' });
+    res.json({ msg: "Contact Removed" });
   } catch (err) {
     console.error(err.message);
-    res.status(500).send('Server Error');
+    res.status(500).send("Server Error");
   }
 });
 
