@@ -12,6 +12,7 @@ node_modules/
 # production
 /client/build
 /config/production*
+config/production*
 
 # environment variables
 /client/.env.local
