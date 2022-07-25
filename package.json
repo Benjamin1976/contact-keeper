@@ -13,9 +13,7 @@
     "express-validator": "^6.4.0",
     "jsonwebtoken": "^8.5.1",
     "mongoose": "^5.9.3",
-    "nodemailer": "^6.4.6",
-    "react-csv": "^2.0.3",
-    "react-datepicker": "^2.14.1"
+    "nodemailer": "^6.4.6"
   },
   "devDependencies": {
     "concurrently": "^5.1.0",
@@ -39,12 +37,6 @@
     "url": "https://github.com/Benjamin1976/contact-keeper/issues"
   },
   "homepage": "https://github.com/Benjamin1976/contact-keeper#readme",
-  "eslintConfig": {
-    "extends": [
-      "react-app",
-      "react-app/jest"
-    ]
-  },
   "browserslist": {
     "production": [
       ">0.2%",
