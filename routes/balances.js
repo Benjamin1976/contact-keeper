@@ -1,32 +1,32 @@
-const express = require('express');
+const express = require("express");
 const router = express.Router();
-const auth = require('../middleware/auth');
+const auth = require("../middleware/auth");
 
-const { check, validationResult } = require('express-validator');
+const { check, validationResult } = require("express-validator");
 
-const User = require('../models/User');
-const Balance = require('../models/Balance');
+const User = require("../models/User");
+const Balance = require("../models/Balance");
 
-const returnDate = dt => {
-  if (dt === null || dt === '') return dt;
+const returnDate = (dt) => {
+  if (dt === null || dt === "") return dt;
   var delim = dt.match(/\D/);
   var dateps = dt.split(delim);
-  return new Date(dateps[2] + '-' + dateps[1] + '-' + dateps[0]);
+  return new Date(dateps[2] + "-" + dateps[1] + "-" + dateps[0]);
 };
 
 // @route   GET api/balances
 // @desc    Get all users balances
-// @access  Private
-router.get('/', auth, async (req, res) => {
+// @access  Privates
+router.get("/", auth, async (req, res) => {
   try {
     // Retrieve all balances for logged in user
     const balances = await Balance.find({ user: req.user.id }).sort({
-      created: -1
+      created: -1,
     });
     res.json(balances);
   } catch (err) {
     console.error(err.message);
-    res.status(500).send('Server Error');
+    res.status(500).send("Server Error");
   }
 });
 
@@ -34,17 +34,15 @@ router.get('/', auth, async (req, res) => {
 // @desc    Add new balance
 // @access  Private
 router.post(
-  '/',
+  "/",
   [
     auth,
     [
-      check('account', 'Please add an account')
-        .not()
-        .isEmpty(),
-      check('outstanding', 'Please ensure numeric').isNumeric()
+      check("account", "Please add an account").not().isEmpty(),
+      check("outstanding", "Please ensure numeric").isNumeric(),
       //   ,
       // check('email', 'Please include a valid email').isEmail()
-    ]
+    ],
   ],
   async (req, res) => {
     const errors = validationResult(req);
@@ -63,7 +61,7 @@ router.post(
       outstanding,
       minimum,
       available,
-      rewards
+      rewards,
     } = req.body;
 
     try {
@@ -72,11 +70,11 @@ router.post(
         user: req.user.id,
         account: account,
         type: type,
-        period: returnDate(period)
+        period: returnDate(period),
       });
 
       if (balance) {
-        res.status(400).json({ msg: 'Account already exists' });
+        res.status(400).json({ msg: "Account already exists" });
       }
 
       balance = new Balance({
@@ -92,7 +90,7 @@ router.post(
         outstanding: outstanding,
         minimum: minimum,
         available: available,
-        rewards: rewards
+        rewards: rewards,
       });
 
       // save balance
@@ -115,7 +113,7 @@ router.post(
     } catch (err) {
       console.error(err.message);
       console.log(returnDate(period));
-      res.status(500).send('Server Error');
+      res.status(500).send("Server Error");
     }
   }
 );
@@ -123,7 +121,7 @@ router.post(
 // @route   PUT api/balances/:id
 // @desc    Update balance
 // @access  Private
-router.put('/:id', auth, async (req, res) => {
+router.put("/:id", auth, async (req, res) => {
   const {
     status,
     period,
@@ -136,7 +134,7 @@ router.put('/:id', auth, async (req, res) => {
     outstanding,
     minimum,
     available,
-    rewards
+    rewards,
   } = req.body;
 
   const balanceFields = {};
@@ -158,11 +156,11 @@ router.put('/:id', auth, async (req, res) => {
     let balance = await Balance.findById(req.params.id);
 
     if (!balance) {
-      return res.status(404).json({ msg: 'Balance does not exist' });
+      return res.status(404).json({ msg: "Balance does not exist" });
     }
 
     if (balance.user.toString() !== req.user.id) {
-      return res.status(401).json({ msg: 'Not Authorised' });
+      return res.status(401).json({ msg: "Not Authorised" });
     }
 
     balance = await Balance.findByIdAndUpdate(
@@ -174,31 +172,31 @@ router.put('/:id', auth, async (req, res) => {
     res.json(balance);
   } catch (err) {
     console.error(err.message);
-    res.status(500).send('Server Error');
+    res.status(500).send("Server Error");
   }
 });
 
 // @route   DELETE api/balance/:id
 // @desc    Delete balance
 // @access  Private
-router.delete('/:id', auth, async (req, res) => {
+router.delete("/:id", auth, async (req, res) => {
   try {
     let balance = await Balance.findById(req.params.id);
 
     if (!balance) {
-      return res.status(400).json({ msg: 'Balance does not exist' });
+      return res.status(400).json({ msg: "Balance does not exist" });
     }
 
     if (balance.user.toString() !== req.user.id) {
-      return res.status(401).json({ msg: 'Not Authorised' });
+      return res.status(401).json({ msg: "Not Authorised" });
     }
 
     await Balance.findByIdAndRemove(req.params.id);
 
-    res.json({ msg: 'Balance Removed' });
+    res.json({ msg: "Balance Removed" });
   } catch (err) {
     console.error(err.message);
-    res.status(500).send('Server Error');
+    res.status(500).send("Server Error");
   }
 });
 

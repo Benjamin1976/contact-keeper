@@ -56,16 +56,16 @@ router.post(
         },
       };
 
+      const secret =
+        process.env.ENV_NODE === "production"
+          ? process.env.jwtSecret
+          : config.get("jwtSecret");
+
       // Create jwtToken & return
-      jwt.sign(
-        payload,
-        config.get("jwtSecret"),
-        { expiresIn: 360000 },
-        (err, token) => {
-          if (err) throw err;
-          res.json({ token });
-        }
-      );
+      jwt.sign(payload, secret, { expiresIn: 360000 }, (err, token) => {
+        if (err) throw err;
+        res.json({ token });
+      });
     } catch (err) {
       console.error(err.message);
       res.status(500).send("Server Error");
