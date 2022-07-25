@@ -3,6 +3,9 @@
   "version": "1.0.0",
   "description": "Contact Manager App",
   "main": "server.js",
+  "engines": {
+    "node": "16.x"
+  },
   "dependencies": {
     "bcryptjs": "^2.4.3",
     "config": "^3.3.0",
