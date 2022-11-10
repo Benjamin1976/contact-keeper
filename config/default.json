@@ -1,4 +1,4 @@
 {
-  "mongoURI_local": "mongodb://contact-keeper:SKYline_123@127.0.0.1:27017/contact-keeper?retryWrites=true&w=majority",
+  "mongoURI_local": "mongodb://127.0.0.1:27017/contact-keeper?readPreference=primary&directConnection=true&ssl=false",
   "jwtSecret": "Secret"
 }
